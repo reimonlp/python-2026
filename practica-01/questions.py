@@ -1,5 +1,5 @@
-import random
-import string
+import random, string
+
 words = [
     "python",
     "programa",
@@ -10,11 +10,15 @@ words = [
     "entero",
     "lista",
 ]
+
 word = random.choice(words)
 guessed = []
 attempts = 6
+mistakes = 0
+
 print("¡Bienvenido al Ahorcado!")
 print()
+
 while attempts > 0:
     # Mostrar progreso: letras adivinadas y guiones para las que faltan
     progress = ""
@@ -28,10 +32,14 @@ while attempts > 0:
     # Verificar si el jugador ya adivinó la palabra completa
     if "_" not in progress:
         print("¡Ganaste!")
+        print(f"Puntaje final: {max(0, 6 - mistakes)}")
         break
+
     print(f"Intentos restantes: {attempts}")
     print(f"Letras usadas: {', '.join(guessed)}")
+
     letter = input("Ingresá una letra: ")
+
     if letter.lower() not in string.ascii_lowercase:
         print("Entrada no válida.")
         continue
@@ -44,7 +52,10 @@ while attempts > 0:
     else:
         guessed.append(letter)
         attempts -= 1
+        mistakes += 1
         print("Esa letra no está en la palabra.")
+
     print()
 else:
     print(f"¡Perdiste! La palabra era: {word}")
+    print("Puntaje final: 0")
