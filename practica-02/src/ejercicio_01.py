@@ -18,23 +18,23 @@ If the implementation is hard to explain, it's a bad idea.
 If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!"""
 
-def count_words(text):
+def _count_words(text):
     """Cuenta el número total de palabras en el texto."""
 
     words = text.split()
     return len(words)
 
-def count_lines(text):
+def _count_lines(text):
     """Cuenta el número total de líneas en el texto."""
 
     lines = text.splitlines()
     return len(lines)
 
-def print_text_analysis(text=text):
+def print_text_analysis(text):
     """Analiza el texto y muestra el total de palabras, líneas y el promedio de palabras por línea."""
     
-    total_words = count_words(text)
-    total_lines = count_lines(text)
+    total_words = _count_words(text)
+    total_lines = _count_lines(text)
     avg_per_line = total_words / total_lines
 
     print(f"Total de líneas: {total_lines}")
@@ -48,4 +48,4 @@ def print_text_analysis(text=text):
             print(f"- \"{line}\" ({line_word_count} palabras)")
 
 if __name__ == "__main__":
-    print_text_analysis()
+    print_text_analysis(text)

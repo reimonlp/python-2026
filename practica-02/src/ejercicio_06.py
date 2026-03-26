@@ -10,7 +10,7 @@ posts = [
 "Workshop de #InteligenciaArtificial en la universidad #Tecnología #Programación"
 ]
 
-def extract_hashtags(posts):
+def _extract_hashtags(posts):
     """Extrae los hashtags de una lista de posts y cuenta su frecuencia."""
 
     hashtags = {}
@@ -26,7 +26,7 @@ def extract_hashtags(posts):
                     hashtags[hashtag] = 1
     return hashtags
 
-def trending_hashtags(hashtags):
+def _trending_hashtags(hashtags):
     """Filtra los hashtags que aparecen más de una vez y los ordena por frecuencia."""
 
     # Filtrar solo los hashtags que aparecen más de una vez
@@ -36,11 +36,11 @@ def trending_hashtags(hashtags):
     trending = dict(sorted(trending.items(), key=lambda item: item[1], reverse=True))
     return trending
 
-def print_trending_hashtags(posts=posts):
+def print_trending_hashtags(posts):
     """Extrae los hashtags de los posts, identifica los trending y los imprime."""
 
-    hashtags = extract_hashtags(posts)
-    trending = trending_hashtags(hashtags)
+    hashtags = _extract_hashtags(posts)
+    trending = _trending_hashtags(hashtags)
 
     print("Hashtags trending (más de una aparición):")
     for tag, count in trending.items():
@@ -49,4 +49,4 @@ def print_trending_hashtags(posts=posts):
     print(f"\nTotal de hashtags únicos: {len(hashtags)}")
 
 if __name__ == "__main__":
-    print_trending_hashtags()
+    print_trending_hashtags(posts)

@@ -9,14 +9,14 @@ playlist = [
 {"title": "Like a Rolling Stone", "duration": "6:13"},
 ]
 
-def duration_to_seconds(duration):
+def _duration_to_seconds(duration):
     """Convertir la duración de mm:ss a segundos"""
 
     minutes, seconds = map(int, duration.split(":"))
 
     return minutes * 60 + seconds
 
-def seconds_to_duration(secs):
+def _seconds_to_duration(secs):
     """Convertir segundos a formato Xm Ys"""
 
     minutes = secs // 60
@@ -30,7 +30,7 @@ def process_playlist(playlist):
     total_duration = 0
 
     for song in playlist:
-        song["duration_seconds"] = duration_to_seconds(song["duration"])
+        song["duration_seconds"] = _duration_to_seconds(song["duration"])
         total_duration += song["duration_seconds"]
 
     # Ordenar la lista de canciones por duración en segundos (de mayor a menor)
@@ -38,14 +38,14 @@ def process_playlist(playlist):
 
     return total_duration
 
-def print_playlist(playlist=playlist):
+def print_playlist(playlist):
     """Imprimir la lista de canciones con su duración y la duración total"""
     
     total_duration = process_playlist(playlist)
-    print(f"Duración total: {seconds_to_duration(total_duration)}")
+    print(f"Duración total: {_seconds_to_duration(total_duration)}")
 
     print(f"Canción más larga: \"{playlist[0]['title']}\" ({playlist[0]['duration']})")
     print(f"Canción más corta: \"{playlist[-1]['title']}\" ({playlist[-1]['duration']})")
 
 if __name__ == "__main__":
-    print_playlist()
+    print_playlist(playlist)

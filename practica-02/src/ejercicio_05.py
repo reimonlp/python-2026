@@ -4,7 +4,7 @@ tarifas = {
     "nacional": (2000, 4500, 8000),
 }
 
-def input_weight_and_zone():
+def _input_weight_and_zone():
     """Solicita al usuario que ingrese el peso del paquete y la zona de destino."""
 
     peso = float(input("Ingrese el peso del paquete (kg): "))
@@ -12,7 +12,7 @@ def input_weight_and_zone():
 
     return peso, zona
 
-def calculate_shipping_cost(peso, zona, tarifas=tarifas):
+def _calculate_shipping_cost(peso, zona, tarifas):
     """Calcula el costo de envío de un paquete según su peso y la zona de destino."""
 
     if zona not in tarifas:
@@ -27,11 +27,11 @@ def calculate_shipping_cost(peso, zona, tarifas=tarifas):
 
     return f"Costo de envío: ${costo}"
 
-def print_shipping_cost(tarifas=tarifas):
+def print_shipping_cost(tarifas):
     """Calcula el costo de envío de un paquete según su peso y la zona de destino."""
 
-    peso, zona = input_weight_and_zone()
-    print(calculate_shipping_cost(peso, zona, tarifas))
+    peso, zona = _input_weight_and_zone()
+    print(_calculate_shipping_cost(peso, zona, tarifas))
 
 if __name__ == "__main__":
-    print_shipping_cost()
+    print_shipping_cost(tarifas)

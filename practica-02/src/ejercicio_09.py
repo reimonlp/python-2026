@@ -1,24 +1,24 @@
 students = [
-{"name": "  Ana García ", "grade": "8", "status": "aprobado"},
-{"name": "pedro lópez", "grade": "4", "status": "DESAPROBADO"},
-{"name": "MARÍA FERNÁNDEZ", "grade": "10", "status": "Aprobado"},
-{"name": "ana garcía", "grade": "9", "status": "aprobado"},
-{"name": None, "grade": "7", "status": "aprobado"},
-{"name": "Luis Martínez  ", "grade": None, "status": "aprobado"},
-{"name": " carlos RUIZ", "grade": "6", "status": "aprobado"},
-{"name": "PEDRO LÓPEZ ", "grade": "3", "status": "desaprobado"},
-{"name": "  ", "grade": "5", "status": "aprobado"},
-{"name": "María Fernández", "grade": "7", "status": "APROBADO"},
-{"name": "Sofía Torres", "grade": "9", "status": "Aprobado"},
-{"name": "  sofía torres ", "grade": "8", "status": "aprobado"},
-{"name": "Carlos Ruiz", "grade": "6", "status": "APROBADO"},
-{"name": "Roberto Díaz", "grade": "absent", "status": "ausente"},
-{"name": "roberto díaz", "grade": "", "status": "Ausente"},
-{"name": None, "grade": None, "status": None},
-{"name": "Laura Méndez", "grade": "7", "status": "aprobado"},
-{"name": "  laura méndez", "grade": "8", "status": "Aprobado"},
-{"name": "GABRIELA RÍOS", "grade": "5", "status": "aprobado"},
-{"name": "gabriela ríos ", "grade": "4", "status": "Desaprobado"},
+    {"name": "  Ana García ", "grade": "8", "status": "aprobado"},
+    {"name": "pedro lópez", "grade": "4", "status": "DESAPROBADO"},
+    {"name": "MARÍA FERNÁNDEZ", "grade": "10", "status": "Aprobado"},
+    {"name": "ana garcía", "grade": "9", "status": "aprobado"},
+    {"name": None, "grade": "7", "status": "aprobado"},
+    {"name": "Luis Martínez  ", "grade": None, "status": "aprobado"},
+    {"name": " carlos RUIZ", "grade": "6", "status": "aprobado"},
+    {"name": "PEDRO LÓPEZ ", "grade": "3", "status": "desaprobado"},
+    {"name": "  ", "grade": "5", "status": "aprobado"},
+    {"name": "María Fernández", "grade": "7", "status": "APROBADO"},
+    {"name": "Sofía Torres", "grade": "9", "status": "Aprobado"},
+    {"name": "  sofía torres ", "grade": "8", "status": "aprobado"},
+    {"name": "Carlos Ruiz", "grade": "6", "status": "APROBADO"},
+    {"name": "Roberto Díaz", "grade": "absent", "status": "ausente"},
+    {"name": "roberto díaz", "grade": "", "status": "Ausente"},
+    {"name": None, "grade": None, "status": None},
+    {"name": "Laura Méndez", "grade": "7", "status": "aprobado"},
+    {"name": "  laura méndez", "grade": "8", "status": "Aprobado"},
+    {"name": "GABRIELA RÍOS", "grade": "5", "status": "aprobado"},
+    {"name": "gabriela ríos ", "grade": "4", "status": "Desaprobado"},
 ]
 
 def clean_student_data(students):
@@ -55,7 +55,7 @@ def clean_student_data(students):
 
     return cleaned_students
 
-def print_cleaned_students(students=students):
+def print_cleaned_students(students):
     """Limpia los datos de los estudiantes y muestra la lista de estudiantes únicos con sus calificaciones y estados."""
 
     cleaned_students = clean_student_data(students)
@@ -70,4 +70,4 @@ def print_cleaned_students(students=students):
     print(f"\nTotal de alumnos válidos: {len(cleaned_students)}")
 
 if __name__ == "__main__":
-    print_cleaned_students()
+    print_cleaned_students(students)

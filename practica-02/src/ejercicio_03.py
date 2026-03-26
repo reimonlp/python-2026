@@ -15,7 +15,7 @@ def hide_spoilers(review, spoiler_words):
 
     return review
 
-def spoiler_words_input():
+def _spoiler_words_input():
     """Solicita al usuario que ingrese las palabras spoiler y las devuelve como una lista."""
 
     spoiler_words = input("Ingrese las palabras spoiler (separadas por coma): ").split(",")
@@ -25,14 +25,13 @@ def spoiler_words_input():
 
     return spoiler_words
 
-def print_review_without_spoilers(review=review):
+def print_review_without_spoilers(review):
     """Solicita al usuario las palabras spoiler, oculta esas palabras en la reseña y muestra el resultado."""
     
-    spoiler_words = spoiler_words_input()
+    spoiler_words = _spoiler_words_input()
     review_clean = hide_spoilers(review, spoiler_words)
     
     print(f"\n{review_clean}")
 
 if __name__ == "__main__":
-    print_review_without_spoilers()
-
+    print_review_without_spoilers(review)

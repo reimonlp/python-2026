@@ -29,13 +29,12 @@ def draw_invisible_friends(friends):
 
     for friend in friends:
         available = [inv for inv in friends_left if inv != friend]
-        if available:
-            invisible = available[0]
-            invisible_pairs[friend] = invisible
-            friends_left.remove(invisible)
-        else:
+        if not available:
             return draw_invisible_friends(friends)
-    
+
+        invisible = available[0]
+        invisible_pairs[friend] = invisible
+        friends_left.remove(invisible)
     return invisible_pairs
 
 def print_invisible_friends():
@@ -50,7 +49,7 @@ def print_invisible_friends():
         print("No se ingresaron participantes.")
         return
     elif len(friends) < 3:
-        print(f"Debe haber al menos 3 participantes.")
+        print("Debe haber al menos 3 participantes.")
         return
 
     invisible_pairs = draw_invisible_friends(friends)

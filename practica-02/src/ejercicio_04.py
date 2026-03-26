@@ -23,4 +23,3 @@ def print_email_info():
 
 if __name__ == "__main__":
     print_email_info()
-
