@@ -52,7 +52,7 @@ rounds = [
 ]
 
 
-def calc_round_scores(rounds):
+def _calc_round_scores(rounds):
     def sort_by_total_score(item):
         return item[1]["total_score"]
 
@@ -106,8 +106,8 @@ def calc_round_scores(rounds):
     return rounds, stats
 
 
-def print_scores(rounds=rounds):
-    rounds, stats = calc_round_scores(rounds[:])
+def print_scores(rounds):
+    rounds, stats = _calc_round_scores(rounds[:])
 
     for i, round in enumerate(rounds):
         last_score = None
@@ -150,4 +150,4 @@ def print_scores(rounds=rounds):
 
 
 if __name__ == "__main__":
-    print_scores()
+    print_scores(rounds)
