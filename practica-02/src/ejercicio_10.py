@@ -67,28 +67,37 @@ def _calc_round_scores(rounds):
         for contestant in rounds[0]["scores"].keys()
     }
 
-    for i, round in enumerate(rounds):
-        for contestant, scores in round["scores"].items():
+    for current_round in rounds:
+        for contestant, scores in current_round["scores"].items():
             round_score = sum(scores.values())
 
-            rounds[i]["scores"][contestant]["total_score"] = round_score
+            scores["total_score"] = round_score
             stats[contestant]["round_scores"].append(round_score)
 
-        rounds[i]["scores"] = dict(
+        current_round["scores"] = dict(
             sorted(
-                rounds[i]["scores"].items(),
+                current_round["scores"].items(),
                 key=sort_by_total_score,
                 reverse=True,
             )
         )
 
-        winner = list(rounds[i]["scores"].keys())[0]
-        stats[winner]["rounds_won"] += 1
-
-        rounds[i]["result"] = {
-            "winner": winner,
-            "score": list(rounds[i]["scores"].values())[0]["total_score"],
+        top_score = max(
+            data["total_score"]
+            for data in current_round["scores"].values()
+        )
+        
+        current_round["result"] = {
+            "winners":  [
+                contestant
+                for contestant, data in current_round["scores"].items()
+                if data["total_score"] == top_score
+            ],
+            "score": top_score,
         }
+
+        for winner in current_round["result"]["winners"]:
+            stats[winner]["rounds_won"] += 1
 
     for contestant, data in stats.items():
         data["total_score"] = sum(data["round_scores"])
@@ -109,12 +118,12 @@ def _calc_round_scores(rounds):
 def print_scores(rounds):
     rounds, stats = _calc_round_scores(rounds[:])
 
-    for i, round in enumerate(rounds):
+    for i, current_round in enumerate(rounds):
         last_score = None
         position = 1
 
-        print(f"Ronda {i+1}: {round['theme']}")
-        for contestant, scores in round["scores"].items():
+        print(f"Ronda {i+1}: {current_round['theme']}")
+        for contestant, scores in current_round["scores"].items():
             score = scores["total_score"]
 
             print(f" {position:>2}º: " if score != last_score else " " * 6, end="")
