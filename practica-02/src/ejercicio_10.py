@@ -84,64 +84,38 @@ rounds: Rounds = [
 ]
 
 
-def _calc_round_scores(rounds: Rounds) -> tuple[Rounds, Stats]:
+def _init_stats(rounds: Rounds) -> Stats:
+    if not rounds:
+        return {}
+
     stats: Stats = {
-        contestant: {
-            "round_scores": [],
-            "total_score": 0,
-            "rounds_won": 0,
-            "best_round": 0,
-            "avg_score": 0,
-        }
-        for contestant in rounds[0]["scores"].keys()
+        contestant: _new_contestant_stats()
+        for contestant in rounds[0]["scores"]
+    }
+    return stats
+
+
+def _new_contestant_stats() -> ContestantStats:
+    return {
+        "round_scores": [],
+        "total_score": 0,
+        "rounds_won": 0,
+        "best_round": 0,
+        "avg_score": 0,
     }
 
-    for current_round in rounds:
-        # Calcular el puntaje total de cada concursante en la ronda actual
-        for contestant, scores in current_round["scores"].items():
-            round_score: int = sum(scores.values())
 
-            scores["total_score"] = round_score
-            stats[contestant]["round_scores"].append(round_score)
+def _finalize_stats(stats: Stats) -> Stats:
+    for contestant in stats.values():
+        num_rounds: int = len(contestant["round_scores"])
 
-        # Ordenar los concursantes por puntaje total en la ronda actual
-        current_round["scores"] = dict(
-            sorted(
-                current_round["scores"].items(),
-                key=lambda item: item[1]["total_score"],
-                reverse=True,
-            )
-        )
+        if num_rounds == 0:
+            continue
 
-        # Determinar el puntaje más alto en la ronda actual
-        top_score: int = max(
-            data["total_score"] for data in current_round["scores"].values()
-        )
+        contestant["total_score"] = sum(contestant["round_scores"])
+        contestant["best_round"] = max(contestant["round_scores"])
+        contestant["avg_score"] = contestant["total_score"] / num_rounds
 
-        # Identificar a los ganadores de la ronda actual (puede haber empates)
-        winners: list[str] = [
-            contestant
-            for contestant, data in current_round["scores"].items()
-            if data["total_score"] == top_score
-        ]
-
-        # Guardar el resultado de la ronda actual, incluyendo los ganadores y su puntaje
-        current_round["result"] = {
-            "winners": winners,
-            "score": top_score,
-        }
-
-        # Actualizar las estadísticas de los concursantes ganadores de la ronda actual
-        for winner in current_round["result"]["winners"]:
-            stats[winner]["rounds_won"] += 1
-
-    # Calcular total, mejor ronda y promedio de puntajes para cada concursante.
-    for contestant, data in stats.items():
-        data["total_score"] = sum(data["round_scores"])
-        data["best_round"] = max(data["round_scores"])
-        data["avg_score"] = data["total_score"] / len(data["round_scores"])
-
-    # Ordenar las estadísticas de los concursantes por puntaje total
     stats = dict(
         sorted(
             stats.items(),
@@ -149,13 +123,75 @@ def _calc_round_scores(rounds: Rounds) -> tuple[Rounds, Stats]:
             reverse=True,
         )
     )
+    return stats
 
-    # Devolver rondas con puntajes totales y estadísticas de concursantes.
+
+def _process_round(current_round: RoundData, stats: Stats) -> None:
+    """Calcula puntajes por ronda y actualiza estadísticas acumuladas."""
+    round_scores = current_round["scores"]
+
+    # si no hay puntajes para esta ronda, se asigna un resultado vacío y se retorna
+    if not round_scores:
+        current_round["result"] = {"winners": [], "score": 0}
+        return
+
+    # Calcula el puntaje total para cada concursante en la ronda actual y actualiza
+    # las estadísticas acumuladas.
+    for contestant, judge_scores in round_scores.items():
+        contestant_stats = stats.setdefault(contestant, _new_contestant_stats())
+        total_score: int = sum(judge_scores.values())
+
+        judge_scores["total_score"] = total_score
+        contestant_stats["round_scores"].append(total_score)
+
+    # Ordena los concursantes por puntaje total en la ronda actual y determina el
+    # ganador o ganadores.
+    sorted_scores = sorted(
+        round_scores.items(),
+        key=lambda item: item[1]["total_score"],
+        reverse=True,
+    )
+
+    # Actualiza los puntajes ordenados en la ronda actual para facilitar la impresión posterior.
+    current_round["scores"] = dict(sorted_scores)
+
+    # El puntaje más alto en la ronda actual es el del primer concursante en la lista ordenada.
+    top_score: int = sorted_scores[0][1]["total_score"]
+
+    # Determina los ganadores de la ronda actual, que son aquellos concursantes
+    # cuyo puntaje total es igual al puntaje más alto.
+    winners: list[str] = [
+        contestant
+        for contestant, data in sorted_scores
+        if data["total_score"] == top_score
+    ]
+
+    # Guarda el resultado de la ronda actual, incluyendo los ganadores y el puntaje más alto.
+    current_round["result"] = {"winners": winners, "score": top_score}
+
+    # Actualiza las estadísticas acumuladas para los ganadores de la ronda actual.
+    for winner in winners:
+        stats[winner]["rounds_won"] += 1
+
+
+def _calc_rounds_scores(rounds: Rounds) -> tuple[Rounds, Stats]:
+    # Inicializa las estadísticas acumuladas para cada concursante.
+    stats: Stats = _init_stats(rounds)
+
+    # Procesa cada ronda
+    for current_round in rounds:
+        _process_round(current_round, stats)
+
+    # Finaliza de calcular las estadísticas
+    stats = _finalize_stats(stats)
+
     return rounds, stats
 
 
 def print_scores(rounds: Rounds) -> None:
-    rounds, stats = _calc_round_scores(deepcopy(rounds))
+
+    # Calcula los puntajes por ronda y las estadísticas acumuladas para cada concursante.
+    rounds, stats = _calc_rounds_scores(deepcopy(rounds))
 
     for i, current_round in enumerate(rounds, start=1):
         last_score = None
